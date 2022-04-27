@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <title>Document</title>
+</head>
+<body>
+    <div id="root"></div>
+    
+</body>
+<script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js
+"></script>
+<script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+<script>
+    const root = document.getElementById("root");
+    //body 태그에 있는 div 가져옴
+    const h3 = React.createElement("h3",{onMouseEnter:()=> console.log("mouse enter")}, "Create span");
+    // React.createElement로 태그 만들기 첫번째 인자=태그종류,2번째 인자 property 스타일,이벤트 id,class등 3번째는 content
+    const btn = React.createElement("button",{onClick: ()=> console.log("Fxxk the React")},"Click me");
+    //위와 같이 버튼 생성
+    const container = React.createElement("div",null,[h3,btn]);
+    //container div 만든다음 세번째 인자에 배열형태로 위의 두개 태그 너음
+    ReactDOM.render(container,root);
+    // root에 container 랜더링
+</script>
+</html>
