@@ -1,43 +1,58 @@
-import { useState, useEffect, useTransition } from "react";
+import { useState, useEffect } from "react";
 
 
 
 function App() {
-  const [todo, setTodo] = useState("")
-  const [todos, setTodos] = useState([]);
-  const onChange = (event)=>{
-    setTodo(event.target.value);
+
+  const [loding, setLoding] = useState(true);
+  const [coins, setCoins] = useState([]);
+
+  const [amount, setAmount] = useState(1);
+  const [selectCoin,setSelectCoin] = useState(1);
+
+
+  const onSelect = (eve)=>{
+    setSelectCoin(eve.target.value)
+    console.log(eve.target.value)
   }
-  const onSubmit =(event)=>{
-    event.preventDefault();
-    if(todo === ""){
-      return;
+  const onChange =(event)=>{
+    if(amount == ""){
+      setAmount(1)
     }
-    setTodos(currentArray=>[todo, ...currentArray]);
-    setTodo("");
+    setAmount(event.target.value)
   }
+  
   useEffect(()=>{
-    console.log(todos);
-  },[todos]);
+    fetch("https://api.coinpaprika.com/v1/tickers")
+    .then((Response)=>Response.json())
+    .then((json) => {
+      setCoins(json)
+      setLoding(false)
+    });
+  },[]);
+
   return (
     <div>
-      <h1>My To Dos ({todos.length})</h1>
-      <form onSubmit={onSubmit}>
-      <input 
-      onChange={onChange} 
-      value={todo} 
-      type="text" 
-      placeholder="Write your to do.."/>
-      <button>Add To do</button>
-      </form>
-      <hr/>
-      <ul>
-      {todos.map((item,index)=>(
-      <li key={index}>{item}</li>
-      ))}
-      </ul>
+      <h1>The coins!! ({coins.length})</h1>
+      {loding ? <strong>Loding...</strong>: 
+      <select onChange={onSelect}>
+        {coins.map((coin)=>
+        <option value={coin.quotes.USD.price}>
+          {coin.name} ({coin.symbol}):${(coin.quotes.USD.price)} USD
+        </option>)}
+      </select>}
+      <div>
+      <label>Dollor : </label>
+      <input onChange={onChange} value={amount} type="number" placeholder="you haved $"/>
+      </div>
+      <div>
+      <label>you can get </label>
+      <input value={(amount/selectCoin)}/>
+      </div>
+      
     </div>
-  );
+    );
 };
 
 export default App;
+ 
